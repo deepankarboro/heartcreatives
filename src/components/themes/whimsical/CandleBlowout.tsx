@@ -49,6 +49,7 @@ export const CandleBlowout: React.FC<CandleBlowoutProps> = ({ card, onNext }) =>
       </div>
 
       <div className="relative my-4 flex flex-col items-center justify-center select-none">
+        {/* Three Candles */}
         <div className="flex gap-8 mb-[-6px] z-20">
           {[0, 1, 2].map((idx) => (
             <div
@@ -71,14 +72,28 @@ export const CandleBlowout: React.FC<CandleBlowoutProps> = ({ card, onNext }) =>
           ))}
         </div>
 
-        <div className="relative z-10 w-56 sm:w-64 h-24 rounded-t-3xl bg-gradient-to-r from-rose-200 via-pink-100 to-rose-200 border-t-4 border-white shadow-xl flex flex-col items-center justify-center">
-          <span className="text-2xl mb-1">🍓 🎂 🍓</span>
-          <span className="font-handwritten text-xl font-bold text-rose-800">
-            {card.recipientName}'s Special Day
-          </span>
+        {/* Top Cake Tier (Decorated Frosting Drips) */}
+        <div className="relative z-10 w-44 sm:w-52 h-18 rounded-t-3xl bg-gradient-to-r from-rose-200 via-pink-100 to-rose-200 border-t-4 border-white shadow-md flex items-center justify-around px-3">
+          <span className="text-xl">🍓</span>
+          <span className="text-base">✨</span>
+          <span className="text-xl">🍓</span>
+          <span className="text-base">✨</span>
+          <span className="text-xl">🍓</span>
         </div>
 
-        <div className="w-72 sm:w-80 h-5 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 rounded-full shadow-lg border border-amber-300/40" />
+        {/* Bottom Cake Tier (Rich Strawberry Sponge) */}
+        <div className="relative z-0 w-60 sm:w-72 h-24 rounded-t-2xl bg-gradient-to-r from-amber-100 via-rose-100 to-amber-100 border-t-4 border-rose-300 shadow-xl flex items-center justify-center">
+          <div className="flex gap-3 text-lg opacity-80">
+            <span>🧁</span>
+            <span>🌸</span>
+            <span>🍒</span>
+            <span>🌸</span>
+            <span>🧁</span>
+          </div>
+        </div>
+
+        {/* Bottom Cake Stand */}
+        <div className="w-72 sm:w-84 h-5 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 rounded-full shadow-lg border border-amber-300/40" />
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3 mt-6">

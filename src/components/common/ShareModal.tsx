@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { X, Copy, Check, Share2, Send, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Copy, Check, Share2, Send, MessageCircle, Link, Loader2 } from 'lucide-react';
 import type { CardData } from '../../types/card';
 import { encodeCardToHash } from '../../utils/cardEncoder';
+import { shortenUrl } from '../../utils/shortener';
 import { sound } from '../../audio/soundEngine';
 
 interface ShareModalProps {
@@ -12,11 +13,38 @@ interface ShareModalProps {
 
 export const ShareModal: React.FC<ShareModalProps> = ({ card, isOpen, onClose }) => {
   const [copied, setCopied] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  const [isShortening, setIsShortening] = useState(true);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const encodedHash = encodeCardToHash(card);
+    const fullUrl = `${window.location.origin}${window.location.pathname}#${encodedHash}`;
+    setShareUrl(fullUrl);
+    setIsShortening(true);
+
+    // Asynchronously shorten URL via TinyURL / is.gd
+    let isMounted = true;
+    shortenUrl(fullUrl)
+      .then((short) => {
+        if (isMounted) {
+          setShareUrl(short);
+          setIsShortening(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setIsShortening(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [card, isOpen]);
 
   if (!isOpen) return null;
-
-  const encodedHash = encodeCardToHash(card);
-  const shareUrl = `${window.location.origin}${window.location.pathname}#${encodedHash}`;
 
   const handleCopy = async () => {
     try {
@@ -71,21 +99,31 @@ export const ShareModal: React.FC<ShareModalProps> = ({ card, isOpen, onClose })
             Share Celebration
           </h3>
           <p className="text-sm text-neutral-400 mt-1">
-            Send this link to <span className="text-pink-300 font-semibold">{card.recipientName}</span>. Anyone with this link can experience the celebration!
+            Send this shortened link to <span className="text-pink-300 font-semibold">{card.recipientName}</span>.
           </p>
         </div>
 
         {/* Link Copy Box */}
-        <div className="flex items-center gap-2 p-2 rounded-2xl bg-black/60 border border-white/15 mb-6">
-          <input
-            type="text"
-            readOnly
-            value={shareUrl}
-            className="flex-1 bg-transparent px-3 py-1.5 text-xs sm:text-sm text-neutral-300 outline-none truncate font-mono"
-          />
+        <div className="flex items-center gap-2 p-2 rounded-2xl bg-black/60 border border-white/15 mb-2">
+          <div className="flex-1 flex items-center gap-2 px-3 py-1.5 min-w-0">
+            {isShortening ? (
+              <div className="flex items-center gap-2 text-xs text-neutral-400 font-mono">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-pink-400" />
+                <span>Shortening share link...</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 w-full min-w-0">
+                <Link className="w-3.5 h-3.5 text-pink-400 flex-shrink-0" />
+                <span className="text-xs sm:text-sm text-neutral-200 font-mono truncate">
+                  {shareUrl}
+                </span>
+              </div>
+            )}
+          </div>
+
           <button
             onClick={handleCopy}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 active:scale-95 ${
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 active:scale-95 flex-shrink-0 ${
               copied
                 ? 'bg-emerald-500 text-white'
                 : 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white shadow-md'
@@ -104,6 +142,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({ card, isOpen, onClose })
             )}
           </button>
         </div>
+
+        <p className="text-[11px] text-neutral-400 mb-6 text-left px-1">
+          ✨ Optimized short link ready for WhatsApp, Telegram, Instagram & SMS.
+        </p>
 
         {/* Quick Social Share Buttons */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

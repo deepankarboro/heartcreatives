@@ -45,7 +45,9 @@ export const BlossomSparklerCake: React.FC<BlossomSparklerCakeProps> = ({ card, 
         </p>
       </div>
 
+      {/* 3D Botanical Cake */}
       <div className="relative my-4 flex flex-col items-center select-none">
+        {/* Sparkler Flame */}
         <div
           onClick={handleBlowOut}
           className="flex flex-col items-center cursor-pointer group mb-[-6px] z-20"
@@ -65,23 +67,25 @@ export const BlossomSparklerCake: React.FC<BlossomSparklerCakeProps> = ({ card, 
           <div className="w-3 h-12 bg-gradient-to-b from-amber-300 via-emerald-600 to-emerald-900 rounded-t-sm shadow" />
         </div>
 
-        <div className="relative z-10 w-44 sm:w-52 h-16 rounded-t-3xl bg-gradient-to-r from-emerald-800 via-teal-700 to-emerald-800 border-t-2 border-amber-300/60 shadow-lg flex items-center justify-center">
-          <div className="flex gap-2 text-sm drop-shadow">
-            <span>🌸</span>
-            <span>🍃</span>
-            <span>🌸</span>
-          </div>
+        {/* Top Cake Tier (Matcha & Sakura Cream) */}
+        <div className="relative z-10 w-44 sm:w-52 h-18 rounded-t-3xl bg-gradient-to-r from-emerald-800 via-teal-700 to-emerald-800 border-t-2 border-amber-300/60 shadow-lg flex items-center justify-around px-4">
+          <span className="text-xl">🌸</span>
+          <span className="text-base">🍃</span>
+          <span className="text-xl">🌸</span>
+          <span className="text-base">🍃</span>
+          <span className="text-xl">🌸</span>
         </div>
 
-        <div className="relative z-0 w-60 sm:w-72 h-24 rounded-t-2xl bg-gradient-to-r from-neutral-900 via-emerald-950 to-neutral-900 border-t-4 border-amber-300/40 shadow-2xl flex flex-col items-center justify-center p-2">
-          <span className="font-display text-lg sm:text-xl text-amber-200">
-            {card.recipientName}'s Floral Tribute
-          </span>
-          <span className="text-[10px] text-emerald-300/70 mt-1 font-mono uppercase tracking-widest">
-            {card.vibe}
-          </span>
+        {/* Bottom Cake Tier (Botanical Leaves & Gold Leaf) */}
+        <div className="relative z-0 w-60 sm:w-72 h-24 rounded-t-2xl bg-gradient-to-r from-neutral-900 via-emerald-950 to-neutral-900 border-t-4 border-amber-300/40 shadow-2xl flex items-center justify-around px-6">
+          <span className="text-lg">🌿</span>
+          <span className="text-sm text-amber-300">✨</span>
+          <span className="text-lg">🌸</span>
+          <span className="text-sm text-amber-300">✨</span>
+          <span className="text-lg">🌿</span>
         </div>
 
+        {/* Golden Wooden Stand */}
         <div className="w-72 sm:w-84 h-5 bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-700 rounded-full shadow-2xl border border-amber-300/40" />
       </div>
 
