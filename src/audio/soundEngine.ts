@@ -234,6 +234,145 @@ class SoundEngine {
     noise.start(now);
   }
 
+  // --- CUPID & CARTOON EFFECTS ---
+
+  public playBowRelease() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.09);
+
+    gain.gain.setValueAtTime(0.4, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.11);
+  }
+
+  public playArrowWhistle() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+    const bufferSize = Math.floor(this.ctx.sampleRate * 0.25);
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1000, now);
+    filter.frequency.exponentialRampToValueAtTime(3000, now + 0.2);
+    filter.Q.setValueAtTime(6, now);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(0.05, now);
+    gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.masterGain);
+
+    noise.start(now);
+  }
+
+  public playArrowThud() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(160, now);
+    osc.frequency.exponentialRampToValueAtTime(38, now + 0.14);
+
+    gain.gain.setValueAtTime(0.5, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.16);
+  }
+
+  public playCartoonBoing() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+
+    // Carrier oscillator
+    const osc = this.ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.exponentialRampToValueAtTime(700, now + 0.35);
+
+    // Vibrato / Spring wobble LFO
+    const lfo = this.ctx.createOscillator();
+    const lfoGain = this.ctx.createGain();
+    lfo.frequency.setValueAtTime(24, now); // 24 Hz rapid wobble
+    lfoGain.gain.setValueAtTime(45, now);
+    lfoGain.gain.exponentialRampToValueAtTime(5, now + 0.35);
+
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(0.4, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    lfo.start(now);
+    osc.start(now);
+    lfo.stop(now + 0.42);
+    osc.stop(now + 0.42);
+  }
+
+  public playHeartbeatPulse() {
+    this.initContext();
+    if (!this.ctx || !this.masterGain || this.isMuted) return;
+
+    const now = this.ctx.currentTime;
+    [0, 0.13].forEach((delay, idx) => {
+      if (!this.ctx || !this.masterGain) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(idx === 0 ? 70 : 55, now + delay);
+      osc.frequency.exponentialRampToValueAtTime(30, now + delay + 0.1);
+
+      gain.gain.setValueAtTime(0.45, now + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.11);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(now + delay);
+      osc.stop(now + delay + 0.12);
+    });
+  }
+
   // --- BACKGROUND MUSIC SYNTHESIZER ---
 
   public startBackgroundMusic(mood: MusicMood) {

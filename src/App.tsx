@@ -6,6 +6,7 @@ import { CardGallery } from './components/studio/CardGallery';
 import { StudioEditor } from './components/studio/StudioEditor';
 import { CardExperienceViewer } from './components/viewer/CardExperienceViewer';
 import { ShareModal } from './components/common/ShareModal';
+import { CupidExperience } from './components/cupid/CupidExperience';
 
 export const App: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('gallery');
@@ -17,6 +18,11 @@ export const App: React.FC = () => {
     const stored = getSavedCards();
     setSavedCards(stored);
 
+    if (window.location.hash === '#cupid') {
+      setViewMode('cupid');
+      return;
+    }
+
     if (window.location.hash) {
       const decoded = decodeCardFromHash(window.location.hash);
       if (decoded) {
@@ -27,6 +33,10 @@ export const App: React.FC = () => {
     }
 
     const handleHashChange = () => {
+      if (window.location.hash === '#cupid') {
+        setViewMode('cupid');
+        return;
+      }
       if (window.location.hash) {
         const decoded = decodeCardFromHash(window.location.hash);
         if (decoded) {
@@ -82,6 +92,21 @@ export const App: React.FC = () => {
           onCreateNew={handleCreateNew}
           onDeleteSavedCard={handleDeleteSavedCard}
           onShareCard={(card) => setShareModalCard(card)}
+          onOpenCupid={() => {
+            window.location.hash = '#cupid';
+            setViewMode('cupid');
+          }}
+        />
+      )}
+
+      {viewMode === 'cupid' && (
+        <CupidExperience
+          onBack={() => {
+            if (window.location.hash === '#cupid') {
+              window.history.replaceState(null, '', window.location.pathname);
+            }
+            setViewMode('gallery');
+          }}
         />
       )}
 

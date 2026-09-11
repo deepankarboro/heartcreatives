@@ -56,4 +56,4 @@ export interface CardData {
   createdAt?: string;
 }
 
-export type ViewMode = 'gallery' | 'viewer' | 'studio';
+export type ViewMode = 'gallery' | 'viewer' | 'studio' | 'cupid';

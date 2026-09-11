@@ -10,6 +10,7 @@ interface CardGalleryProps {
   onCreateNew: () => void;
   onDeleteSavedCard: (id: string) => void;
   onShareCard: (card: CardData) => void;
+  onOpenCupid: () => void;
 }
 
 export const CardGallery: React.FC<CardGalleryProps> = ({
@@ -18,6 +19,7 @@ export const CardGallery: React.FC<CardGalleryProps> = ({
   onCreateNew,
   onDeleteSavedCard,
   onShareCard,
+  onOpenCupid,
 }) => {
   const getThemeIcon = (theme: string) => {
     switch (theme) {
@@ -58,16 +60,27 @@ export const CardGallery: React.FC<CardGalleryProps> = ({
           Craft breathtaking interactive celebration pages with audio soundscapes, particle physics, 3D memory orbits, cake blowing ceremonies, and scratch-off secrets.
         </p>
 
-        <div className="pt-2">
+        <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => {
               sound.playPop();
               onCreateNew();
             }}
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-400 hover:via-purple-500 hover:to-indigo-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-pink-500/25 transition-all active:scale-95 group"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-400 hover:via-purple-500 hover:to-indigo-500 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition-all active:scale-95 group"
           >
             <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
             <span>Create New Celebration</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playPop();
+              onOpenCupid();
+            }}
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 hover:from-rose-500 hover:via-pink-500 hover:to-amber-400 text-white font-bold text-sm shadow-xl shadow-rose-600/30 transition-all hover:scale-105 active:scale-95 group border border-pink-400/30"
+          >
+            <span className="text-lg group-hover:scale-125 transition-transform">🏹</span>
+            <span>Cupid&apos;s Strike Scene</span>
           </button>
         </div>
       </div>
